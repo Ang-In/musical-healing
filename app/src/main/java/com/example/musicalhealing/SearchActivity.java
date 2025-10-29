@@ -15,12 +15,12 @@ public class SearchActivity extends AppCompatActivity {
         setContentView(R.layout.activity_search);
 
         EditText moodInput = findViewById(R.id.moodInput);
-        Button go = findViewById(R.id.goBtn);
-        go.setOnClickListener(v -> {
-            String mood = moodInput.getText().toString().trim();
+        Button goBtn = findViewById(R.id.goBtn);
+
+        goBtn.setOnClickListener(v -> {
+            String mood = moodInput.getText() != null ? moodInput.getText().toString().trim() : "";
             if (mood.isEmpty()) mood = "happy";
-            startActivity(new Intent(this, PlayerActivity.class)
-                    .putExtra("mood", mood));
+            startActivity(new Intent(this, PlayerActivity.class).putExtra("mood", mood));
         });
     }
 }
