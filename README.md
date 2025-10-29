@@ -23,13 +23,14 @@ Musical Healing is an Android app that:
 Before building this project, ensure you have:
 
 1. **Java Development Kit (JDK)**
-   - JDK 11 or higher is required
+   - **JDK 17 or higher is required** (Android Gradle Plugin 8.13+ requirement)
    - You can download from: https://adoptium.net/
-   - Or use Android Studio's bundled JDK
+   - Or use Android Studio's bundled JDK (Hedgehog or newer includes JDK 17)
 
 2. **Android Studio**
    - Download from: https://developer.android.com/studio
    - Recommended: Latest stable version (Hedgehog or newer)
+   - Android Studio Hedgehog+ includes JDK 17 by default
 
 3. **Android SDK**
    - compileSdk: 35
@@ -55,16 +56,25 @@ cd musical-healing
 **Android Studio (Required)**
 - Download from: https://developer.android.com/studio
 - Install the latest stable version (Hedgehog or newer)
-- Android Studio includes JDK, so you don't need to install Java separately
+- Android Studio includes JDK 17, so you don't need to install Java separately
 
-**Note**: If you want to build from command line without Android Studio, you'll need JDK 11 or higher:
+**Note**: If you want to build from command line without Android Studio, you'll need JDK 17 or higher:
 ```bash
 # macOS (using Homebrew)
-brew install openjdk@11
+brew install openjdk@17
 
 # Verify installation
 java -version
-# Should show: openjdk version "11.x.x" or higher
+# Should show: openjdk version "17.x.x" or higher
+```
+
+**Important**: If you get a "requires Java 17" error, set your JAVA_HOME:
+```bash
+# macOS - Add to ~/.zshrc or ~/.bash_profile
+export JAVA_HOME=$(/usr/libexec/java_home -v 17)
+
+# Or use Android Studio's JDK
+export JAVA_HOME="/Applications/Android Studio.app/Contents/jbr/Contents/Home"
 ```
 
 ### 3. Configure Jamendo API Key

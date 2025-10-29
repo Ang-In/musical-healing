@@ -31,8 +31,8 @@ public class PlayerActivity extends AppCompatActivity {
     private PlayerView playerView;
     private ExoPlayer player;
 
-    // TODO: replace with your actual Jamendo client id
-    private static final String JAMENDO_CLIENT_ID = "YOUR_JAMENDO_CLIENT_ID";
+    // Jamendo API Client ID
+    private static final String JAMENDO_CLIENT_ID = "3d47fdb9";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -48,8 +48,14 @@ public class PlayerActivity extends AppCompatActivity {
     }
 
     private void fetchAndPlay(String mood) {
+        android.util.Log.d("PlayerActivity", "=== Starting fetchAndPlay ===");
+        android.util.Log.d("PlayerActivity", "Mood: " + mood);
+        android.util.Log.d("PlayerActivity", "Client ID: " + JAMENDO_CLIENT_ID);
+
         JamendoApi api = ServiceLocator.jamendoApi();
         String query = expandQuery(mood);
+
+        android.util.Log.d("PlayerActivity", "Expanded query: " + query);
 
         Call<JamendoResp<JamendoTrack>> call = api.tracks(
                 JAMENDO_CLIENT_ID,
@@ -63,8 +69,22 @@ public class PlayerActivity extends AppCompatActivity {
         call.enqueue(new Callback<JamendoResp<JamendoTrack>>() {
             @Override
             public void onResponse(Call<JamendoResp<JamendoTrack>> call, Response<JamendoResp<JamendoTrack>> response) {
+                android.util.Log.d("PlayerActivity", "=== API Response Received ===");
+                android.util.Log.d("PlayerActivity", "Response code: " + response.code());
+                android.util.Log.d("PlayerActivity", "Response successful: " + response.isSuccessful());
+                android.util.Log.d("PlayerActivity", "Response body null: " + (response.body() == null));
+
+                if (response.body() != null) {
+                    android.util.Log.d("PlayerActivity", "Results null: " + (response.body().results == null));
+                    if (response.body().results != null) {
+                        android.util.Log.d("PlayerActivity", "Number of tracks: " + response.body().results.size());
+                    }
+                }
+
                 if (!response.isSuccessful() || response.body() == null || response.body().results == null) {
-                    Toast.makeText(PlayerActivity.this, "No tracks found", Toast.LENGTH_SHORT).show();
+                    String errorMsg = "No tracks found. Code: " + response.code();
+                    android.util.Log.e("PlayerActivity", errorMsg);
+                    Toast.makeText(PlayerActivity.this, errorMsg, Toast.LENGTH_LONG).show();
                     finish();
                     return;
                 }
@@ -84,7 +104,9 @@ public class PlayerActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<JamendoResp<JamendoTrack>> call, Throwable t) {
-                Toast.makeText(PlayerActivity.this, "Network error", Toast.LENGTH_SHORT).show();
+                String errorMsg = "Network error: " + (t.getMessage() != null ? t.getMessage() : "Unknown error");
+                android.util.Log.e("PlayerActivity", "API call failed", t);
+                Toast.makeText(PlayerActivity.this, errorMsg, Toast.LENGTH_LONG).show();
                 finish();
             }
         });

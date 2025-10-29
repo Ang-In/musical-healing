@@ -1,5 +1,5 @@
 package com.example.musicalhealing;
-import java.util.List;
+import java.util.Map;
 
 public class JamendoTrack {
     public String id;
@@ -14,6 +14,7 @@ public class JamendoTrack {
     public MusicInfo musicinfo;
 
     public static class MusicInfo {
-        public List<String> tags;
+        // tags is an object with genre/instrument keys, not an array
+        public Map<String, Object> tags;
     }
 }
